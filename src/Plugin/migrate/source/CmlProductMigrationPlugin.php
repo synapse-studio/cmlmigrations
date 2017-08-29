@@ -12,10 +12,10 @@ use Drupal\cmlservice\Xml\XmlObject;
  * Source for CSV.
  *
  * @MigrateSource(
- *   id = "cml_tovar"
+ *   id = "cml_product"
  * )
  */
-class CmlTovarMigrationPlugin extends SourcePluginBase {
+class CmlProductMigrationPlugin extends SourcePluginBase {
 
   /**
    * {@inheritdoc}
@@ -52,10 +52,8 @@ class CmlTovarMigrationPlugin extends SourcePluginBase {
         'catalog' => $row['Gruppy'][0],
         'created' => time(),
         'changed' => time(),
-        'variations' => $row['Id'],
       ];
     }
-    dsm($fields);
     $this->fields = $fields;
   }
 

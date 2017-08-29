@@ -12,7 +12,7 @@ destination:
   plugin: entity:commerce_product_variation
 process:
   type:
-    plugin: default
-    default_value: order
-  title: title
-  status: status
+    plugin: default_value
+    default_value: default
+  'price/number': price
+  'price/currency_code': ccode

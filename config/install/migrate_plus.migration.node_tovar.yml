@@ -35,3 +35,12 @@ process:
       plugin: migration_lookup
       migration: cmlmigrations_taxonomy_catalog
       source: catalog
+  field_tovar_variation:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: variations
+    -
+      plugin: migration_lookup
+      migration: cmlmigrations_commerce_product_variation
+      source: variations

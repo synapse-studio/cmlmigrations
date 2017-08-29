@@ -1,7 +1,8 @@
 # cmlmigrations
 
 Миграции находятся в группе cml - её нужно создать перед просмором
-http://887-m-hao.n3.s3dev.ru/admin/structure/migrate/manage/cml/migrations
+ * /admin/structure/migrate/manage/cml/migrations
+ * drush dre cmlmigrations -y (команда при изменении конфига)
 
 ## Посмтреть статус в консоли
 drush ms

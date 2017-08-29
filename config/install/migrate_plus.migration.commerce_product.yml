@@ -7,7 +7,7 @@ dependencies:
     module:
       - cmlmigrations
 source:
-  plugin: cml_offer
+  plugin: cml_product
 destination:
   plugin: entity:commerce_product
 process:

@@ -5,7 +5,7 @@ namespace Drupal\cmlmigrations\Plugin\migrate\source;
 use Drupal\migrate\Plugin\migrate\source\SourcePluginBase;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\cmlservice\Controller\GetLastCml;
-use Drupal\cmlservice\Xml\CatalogParcer;
+use Drupal\cmlservice\Xml\OffersParcer;
 use Drupal\cmlservice\Xml\XmlObject;
 
 /**
@@ -26,7 +26,7 @@ class CmOfferMigrationPlugin extends SourcePluginBase {
     $cml_xml = $cml->field_cml_xml->getValue();
     $files = [];
     $data = FALSE;
-    $filekeys['import'] = TRUE;
+    $filekeys['offers'] = TRUE;
     if (!empty($cml_xml)) {
       foreach ($cml_xml as $xml) {
         $file = file_load($xml['target_id']);
@@ -41,27 +41,31 @@ class CmOfferMigrationPlugin extends SourcePluginBase {
     if ($filepath) {
       $xmlObj = new XmlObject();
       $xmlObj->parseXmlFile($filepath);
-      $data = CatalogParcer::parce($xmlObj->xmlString);
+      $data = OffersParcer::parce($xmlObj->xmlString);
     }
     $this->rows = $data;
+
+    $fields = [];
+    foreach ($this->rows as $key => $row) {
+      $fields[$key] = [
+        'uuid' => $row['Id'],
+        'Naimenovanie' => $row['Naimenovanie'],
+        'BazovaaEdinica' => $row['BazovaaEdinica'],
+        'Kolicestvo' => $row['Kolicestvo'],
+        'Sklad' => $row['Sklad'],
+        'price' => $row['Ceny'][0]['ЦенаЗаЕдиницу'],
+        'ccode' => 'RUB',
+      ];
+    }
+    dsm($fields);
+    $this->fields = $fields;
   }
 
   /**
    * {@inheritdoc}
    */
   public function initializeIterator() {
-    $fields = [];
-    foreach ($this->rows as $key => $row) {
-      $fields[$key] = [
-        'uuid' => $row['id'],
-        'name' => $row['name'],
-        'weight' => $raw['term_weight'],
-      ];
-      if ($row['parent']) {
-        $fields[$key]['parent'] = $row['parent'];
-      }
-    }
-    return new \ArrayIterator($fields);
+    return new \ArrayIterator($this->fields);
   }
 
   /**
@@ -87,12 +91,7 @@ class CmOfferMigrationPlugin extends SourcePluginBase {
    * {@inheritdoc}
    */
   public function fields() {
-    $fields = [
-      'uuid' => $this->t('UUID Key'),
-      'name' => $this->t('Catalog Group Name'),
-      'weight' => $this->t('Weight'),
-      'parent' => $this->t('Parent UUID'),
-    ];
+    $fields = OffersParcer::map();
     return $fields;
   }
 
