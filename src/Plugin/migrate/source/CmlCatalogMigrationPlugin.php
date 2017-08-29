@@ -29,12 +29,17 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
    * {@inheritdoc}
    */
   public function fields() {
-    $fields = [
-      'uuid' => $this->t('1С UUID'),
-      'name' => $this->t('Name'),
-      'weight' => $this->t('Term weight'),
-      'parent_uuid' => $this->t('Parent UUID'),
-    ];
+    $fields = [];
+    $xml = $fetcher_result->getRaw();
+    $raws  = CatalogParcer::parce($xml);
+    foreach ($raws as $key => $raw) {
+      $fields[$key] = [
+        'uuid' => $this->t('1С UUID'),
+        'name' => $this->t('Name'),
+        'weight' => $this->t('Term weight'),
+        'parent_uuid' => $this->t('Parent UUID'),
+      ];
+    }
     return $fields;
   }
 
