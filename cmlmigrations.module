@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * cmlmigrations.module
+ */
+
+/**
+ * Implements hook_migration_plugins_alter().
+ */
+function cmlmigrations_migration_plugins_alter(&$definitions) {
+  // $definitions['druio_taxonomy_city']['source']['path'] = drupal_get_path('module', 'druio_migrate') . $definitions['druio_taxonomy_city']['source']['path'];
+}
+
+/**
+ * Hook Cron.
+ */
+function cmlmigrations_cron() {
+
+}

@@ -1,0 +1,5 @@
+name: cmlmigrations
+type: module
+description: cml migrations
+core: 8.x
+package: synapse

@@ -1,0 +1,27 @@
+# Import Catalog in taxonomy.
+id: cmlmigrations_taxonomy_catalog
+label: Catalog tree
+migration_group: cml
+dependencies:
+  enforced:
+    module:
+      - cmlmigrations
+source:
+  plugin: cml_catalog
+destination:
+  plugin: entity:taxonomy_term
+process:
+  vid:
+    plugin: default_value
+    default_value: catalog
+  name: name
+  parent:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: cmlmigrations_taxonomy_catalog
+      source: parent
+  weight: weight
