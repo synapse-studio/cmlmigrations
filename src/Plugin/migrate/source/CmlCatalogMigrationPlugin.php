@@ -34,10 +34,10 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
     $raws  = CatalogParcer::parce($xml);
     foreach ($raws as $key => $raw) {
       $fields[$key] = [
-        'uuid' => $this->t('1С UUID'),
-        'name' => $this->t('Name'),
-        'weight' => $this->t('Term weight'),
-        'parent_uuid' => $this->t('Parent UUID'),
+        'uuid' => $raw['id'],
+        'name' => $raw['name'],
+        'weight' => $raw['term_weight'],
+        'parent_uuid' => [trim($raw['parent'])],
       ];
     }
     return $fields;
