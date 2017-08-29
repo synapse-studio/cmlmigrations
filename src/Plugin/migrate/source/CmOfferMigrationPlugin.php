@@ -12,10 +12,10 @@ use Drupal\cmlservice\Xml\XmlObject;
  * Source for CSV.
  *
  * @MigrateSource(
- *   id = "cml_catalog"
+ *   id = "cml_offer"
  * )
  */
-class CmlCatalogMigrationPlugin extends SourcePluginBase {
+class CmOfferMigrationPlugin extends SourcePluginBase {
 
   /**
    * {@inheritdoc}
@@ -55,7 +55,7 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
       $fields[$key] = [
         'uuid' => $row['id'],
         'name' => $row['name'],
-        'weight' => $row['term_weight'],
+        'weight' => $raw['term_weight'],
       ];
       if ($row['parent']) {
         $fields[$key]['parent'] = $row['parent'];

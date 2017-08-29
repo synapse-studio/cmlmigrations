@@ -5,17 +5,17 @@ namespace Drupal\cmlmigrations\Plugin\migrate\source;
 use Drupal\migrate\Plugin\migrate\source\SourcePluginBase;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\cmlservice\Controller\GetLastCml;
-use Drupal\cmlservice\Xml\CatalogParcer;
+use Drupal\cmlservice\Xml\TovarParcer;
 use Drupal\cmlservice\Xml\XmlObject;
 
 /**
  * Source for CSV.
  *
  * @MigrateSource(
- *   id = "cml_catalog"
+ *   id = "cml_tovar"
  * )
  */
-class CmlCatalogMigrationPlugin extends SourcePluginBase {
+class CmlTovarMigrationPlugin extends SourcePluginBase {
 
   /**
    * {@inheritdoc}
@@ -41,27 +41,28 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
     if ($filepath) {
       $xmlObj = new XmlObject();
       $xmlObj->parseXmlFile($filepath);
-      $data = CatalogParcer::parce($xmlObj->xmlString);
+      $data = TovarParcer::parce($xmlObj->xmlString);
     }
     $this->rows = $data;
+    $fields = [];
+    foreach ($this->rows as $key => $row) {
+      $fields[$key] = [
+        'uuid' => $row['Id'],
+        'title' => $row['Naimenovanie'],
+        'catalog' => $row['Gruppy'][0],
+        'created' => time(),
+        'changed' => time(),
+      ];
+    }
+    dsm($fields);
+    $this->fields = $fields;
   }
 
   /**
    * {@inheritdoc}
    */
   public function initializeIterator() {
-    $fields = [];
-    foreach ($this->rows as $key => $row) {
-      $fields[$key] = [
-        'uuid' => $row['id'],
-        'name' => $row['name'],
-        'weight' => $row['term_weight'],
-      ];
-      if ($row['parent']) {
-        $fields[$key]['parent'] = $row['parent'];
-      }
-    }
-    return new \ArrayIterator($fields);
+    return new \ArrayIterator($this->fields);
   }
 
   /**
@@ -88,10 +89,18 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
    */
   public function fields() {
     $fields = [
-      'uuid' => $this->t('UUID Key'),
-      'name' => $this->t('Catalog Group Name'),
-      'weight' => $this->t('Weight'),
-      'parent' => $this->t('Parent UUID'),
+      'Id' => $this->t('UUID Key'),
+      'Artikul' => $this->t('Artikul'),
+      'Naimenovanie' => $this->t('Naimenovanie'),
+      'BazovaaEdinica' => $this->t('BazovaaEdinica'),
+      'Gruppy' => $this->t('Gruppy'),
+      'Kategoria' => $this->t('Kategoria'),
+      'Opisanie' => $this->t('Opisanie'),
+      'Kartinka' => $this->t('Kartinka'),
+      'ZnaceniaSvoistv' => $this->t('ZnaceniaSvoistv'),
+      'StavkiNalogov' => $this->t('StavkiNalogov'),
+      'HarakteristikiTovara' => $this->t('HarakteristikiTovara'),
+      'ZnaceniaRekvizitov' => $this->t('ZnaceniaRekvizitov'),
     ];
     return $fields;
   }

@@ -1,0 +1,37 @@
+# Import Catalog in taxonomy.
+id: cmlmigrations_node_tovar
+label: Nnode Tovar
+migration_group: cml
+dependencies:
+  enforced:
+    module:
+      - cmlmigrations
+source:
+  plugin: cml_tovar
+destination:
+  plugin: entity:node
+process:
+  type:
+    plugin: default_value
+    default_value: tovar
+  sticky:
+    plugin: default_value
+    default_value: 0
+  uid:
+    plugin: default_value
+    default_value: 1
+  title: title
+  status: status
+  created: created
+  changed: changed
+  'body/value': body_value
+  'body/format': body_format
+  field_catalog:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: catalog
+    -
+      plugin: migration_lookup
+      migration: cmlmigrations_taxonomy_catalog
+      source: catalog

@@ -7,7 +7,8 @@ http://887-m-hao.n3.s3dev.ru/admin/structure/migrate/manage/cml/migrations
 drush ms
 
 ## Импортировать каталог
-drush mi cmlmigrations_taxonomy_catalog
+ * drush mi cmlmigrations_taxonomy_catalog
+ * drush mi cmlmigrations_taxonomy_catalog --update (для обновления)
 
 ## Снести каталог
 drush mr cmlmigrations_taxonomy_catalog
