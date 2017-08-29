@@ -3,9 +3,9 @@
 namespace Drupal\cmlmigrations\Plugin\migrate\source;
 
 use Drupal\migrate\Plugin\migrate\source\SourcePluginBase;
-use Drupal\cmlservice\Xml\CatalogParcer;
-use Drupal\cmlservice\Controller\GetLastCml;
 use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\cmlservice\Controller\GetLastCml;
+use Drupal\cmlservice\Xml\CatalogParcer;
 use Drupal\cmlservice\Xml\XmlObject;
 
 /**
@@ -52,7 +52,7 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
    * {@inheritdoc}
    */
   public function initializeIterator() {
-    return new \ArrayIterator([['id' => '']]);
+    return new \ArrayIterator([['uuid' => []]]);
   }
 
   /**
@@ -69,7 +69,7 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
     return [
       'uuid' => [
         'type' => 'string',
-        'alias' => 'uuid',
+        'alias' => 'id',
       ],
     ];
   }
