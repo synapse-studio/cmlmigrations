@@ -43,16 +43,26 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
       $xmlObj->parseXmlFile($filepath);
       $data = CatalogParcer::parce($xmlObj->xmlString);
     }
-
     $this->rows = $data;
-    dsm($data);
+    dsm($this->rows);
   }
 
   /**
    * {@inheritdoc}
    */
   public function initializeIterator() {
-    return new \ArrayIterator([['uuid' => []]]);
+    $fields = [];
+    foreach ($this->rows as $key => $row) {
+      $fields[$key] = [
+        'uuid' => $row['id'],
+        'name' => $row['name'],
+        'weight' => $raw['term_weight'],
+      ];
+      if ($row['parent']) {
+        $fields[$key]['parent'] = $row['parent'];
+      }
+    }
+    return new \ArrayIterator($fields);
   }
 
   /**
@@ -78,15 +88,12 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
    * {@inheritdoc}
    */
   public function fields() {
-    $fields = [];
-    foreach ($this->rows as $key => $row) {
-      $fields[$key] = [
-        'uuid' => $row['id'],
-        'name' => $row['name'],
-        'weight' => $raw['term_weight'],
-        'parent_uuid' => [trim($row['parent'])],
-      ];
-    }
+    $fields = [
+      'uuid' => $this->t('UUID Key'),
+      'name' => $this->t('Catalog Group Name'),
+      'weight' => $this->t('Weight'),
+      'parent' => $this->t('Parent UUID'),
+    ];
     return $fields;
   }
 
