@@ -31,7 +31,7 @@ class CmOfferMigrationPlugin extends SourcePluginBase {
     $this->rows = $rows;
     if ($rows) {
       $k = 0;
-      $keys = [2000, 2500];
+      $keys = [0, 100];
       foreach ($rows as $key => $row) {
         $k++;
         if (($k > $keys[0] && $k <= $keys[1]) || !$debug) {
