@@ -22,6 +22,31 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration);
+    $rout_name = \Drupal::routeMatch()->getRouteName();
+
+    $filepath = $this->getFilePath();
+    $rows = $this->filePathToData($filepath);
+    $fields = [];
+    foreach ($rows as $key => $row) {
+      $fields[$key] = [
+        'uuid' => $row['id'],
+        'name' => $row['name'],
+        'weight' => $row['term_weight'],
+      ];
+      if (isset($row['parent']) && $row['parent']) {
+        $fields[$key]['parent'] = $row['parent'];
+      }
+    }
+    if ($rout_name == "entity.migration.list") {
+      dsm($fields);
+    }
+    $this->fields = $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFilePath() {
     $cml = GetLastCml::load();
     $cml_xml = $cml->field_cml_xml->getValue();
     $files = [];
@@ -38,30 +63,32 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
       }
     }
     $filepath = array_shift($files);
+    $this->filepath = $filepath;
+    return $filepath;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function filePathToData($filepath) {
+    $rows = FALSE;
     if ($filepath) {
       $xmlObj = new XmlObject();
       $xmlObj->parseXmlFile($filepath);
       $data = CatalogParcer::parce($xmlObj->xmlString);
+      if (!empty($data)) {
+        $rows = $data;
+      }
     }
     $this->rows = $data;
+    return $rows;
   }
 
   /**
    * {@inheritdoc}
    */
   public function initializeIterator() {
-    $fields = [];
-    foreach ($this->rows as $key => $row) {
-      $fields[$key] = [
-        'uuid' => $row['id'],
-        'name' => $row['name'],
-        'weight' => $row['term_weight'],
-      ];
-      if ($row['parent']) {
-        $fields[$key]['parent'] = $row['parent'];
-      }
-    }
-    return new \ArrayIterator($fields);
+    return new \ArrayIterator($this->fields);
   }
 
   /**

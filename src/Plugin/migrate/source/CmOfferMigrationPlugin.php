@@ -22,6 +22,57 @@ class CmOfferMigrationPlugin extends SourcePluginBase {
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration);
+    $rout_name = \Drupal::routeMatch()->getRouteName();
+
+    $filepath = $this->getFilePath();
+    $rows = $this->filePathToData($filepath);
+    $fields = [];
+    if ($rows) {
+      $k = 0;
+      $keys = [0, 100];
+      foreach ($this->rows as $key => $row) {
+        if (($k >= $keys[0] && $k < $keys[1]) || $rout_name != "entity.migration.list") {
+          $k++;
+          $fields[$key] = [
+            'uuid' => $row['Id'],
+            'Naimenovanie' => $row['Naimenovanie'],
+            'BazovaaEdinica' => $row['BazovaaEdinica'],
+            'Kolicestvo' => $row['Kolicestvo'],
+            'Sklad' => $row['Sklad'],
+            'price' => $row['Ceny'][0]['ЦенаЗаЕдиницу'],
+            'ccode' => 'RUB',
+          ];
+        }
+      }
+    }
+    if ($rout_name == "entity.migration.list") {
+      dsm($fields);
+    }
+    // Итератор возьмёт данные отсюда.
+    $this->fields = $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function filePathToData($filepath) {
+    $rows = FALSE;
+    if ($filepath) {
+      $xmlObj = new XmlObject();
+      $xmlObj->parseXmlFile($filepath);
+      $data = OffersParcer::parce($xmlObj->xmlString);
+      if (!empty($data)) {
+        $rows = $data;
+      }
+    }
+    $this->rows = $data;
+    return $rows;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFilePath() {
     $cml = GetLastCml::load();
     $cml_xml = $cml->field_cml_xml->getValue();
     $files = [];
@@ -38,27 +89,8 @@ class CmOfferMigrationPlugin extends SourcePluginBase {
       }
     }
     $filepath = array_shift($files);
-    if ($filepath) {
-      $xmlObj = new XmlObject();
-      $xmlObj->parseXmlFile($filepath);
-      $data = OffersParcer::parce($xmlObj->xmlString);
-    }
-    $this->rows = $data;
-
-    $fields = [];
-    foreach ($this->rows as $key => $row) {
-      $fields[$key] = [
-        'uuid' => $row['Id'],
-        'Naimenovanie' => $row['Naimenovanie'],
-        'BazovaaEdinica' => $row['BazovaaEdinica'],
-        'Kolicestvo' => $row['Kolicestvo'],
-        'Sklad' => $row['Sklad'],
-        'price' => $row['Ceny'][0]['ЦенаЗаЕдиницу'],
-        'ccode' => 'RUB',
-      ];
-    }
-    dsm($fields);
-    $this->fields = $fields;
+    $this->filepath = $filepath;
+    return $filepath;
   }
 
   /**
