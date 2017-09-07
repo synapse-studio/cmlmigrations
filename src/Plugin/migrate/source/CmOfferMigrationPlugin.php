@@ -37,7 +37,6 @@ class CmOfferMigrationPlugin extends SourcePluginBase {
         if (($k > $keys[0] && $k <= $keys[1]) || !$debug) {
           $fields[$key] = [
             'uuid' => $row['Id'],
-            'sku' => $row['Id'],
             'title' => $row['Naimenovanie'],
             'unit' => $row['BazovaaEdinica'],
             'Kolicestvo' => $row['Kolicestvo'],
