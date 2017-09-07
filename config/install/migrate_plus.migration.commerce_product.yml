@@ -6,6 +6,10 @@ dependencies:
   enforced:
     module:
       - cmlmigrations
+migration_dependencies:
+  required:
+    - cmlmigrations_taxonomy_catalog
+    - cmlmigrations_commerce_product_variation
 source:
   plugin: cml_product
 destination:

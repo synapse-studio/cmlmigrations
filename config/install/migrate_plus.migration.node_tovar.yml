@@ -1,11 +1,15 @@
 # Import Catalog in taxonomy.
 id: cmlmigrations_node_tovar
-label: Nnode Tovar
+label: Node Tovar
 migration_group: cml
 dependencies:
   enforced:
     module:
       - cmlmigrations
+migration_dependencies:
+  required:
+    - cmlmigrations_taxonomy_catalog
+    - cmlmigrations_commerce_product_variation
 source:
   plugin: cml_tovar
 destination:
