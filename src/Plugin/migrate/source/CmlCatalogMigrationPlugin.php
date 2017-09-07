@@ -22,10 +22,16 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration);
-    $rout_name = \Drupal::routeMatch()->getRouteName();
+    // Debug.
+    $debug = FALSE;
+    if (\Drupal::routeMatch()->getRouteName() == "entity.migration.list") {
+      $debug = TRUE;
+    }
 
-    $filepath = $this->getFilePath();
-    $rows = $this->filePathToData($filepath);
+    $filepath = GetLastCml::filePath('import');
+    $rows = CatalogParcer::getRows($filepath);
+    $this->rows = $rows;
+
     $fields = [];
     foreach ($rows as $key => $row) {
       $fields[$key] = [
@@ -37,51 +43,10 @@ class CmlCatalogMigrationPlugin extends SourcePluginBase {
         $fields[$key]['parent'] = $row['parent'];
       }
     }
-    if ($rout_name == "entity.migration.list") {
-      dsm($fields);
-    }
     $this->fields = $fields;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFilePath() {
-    $cml = GetLastCml::load();
-    $cml_xml = $cml->field_cml_xml->getValue();
-    $files = [];
-    $data = FALSE;
-    $filekeys['import'] = TRUE;
-    if (!empty($cml_xml)) {
-      foreach ($cml_xml as $xml) {
-        $file = file_load($xml['target_id']);
-        $filename = $file->getFilename();
-        $filekey = strstr($filename, '.', TRUE);
-        if (isset($filekeys[$filekey]) && $filekeys[$filekey]) {
-          $files[] = $file->getFileUri();
-        }
-      }
+    if ($debug) {
+      // dsm($fields);
     }
-    $filepath = array_shift($files);
-    $this->filepath = $filepath;
-    return $filepath;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function filePathToData($filepath) {
-    $rows = FALSE;
-    if ($filepath) {
-      $xmlObj = new XmlObject();
-      $xmlObj->parseXmlFile($filepath);
-      $data = CatalogParcer::parce($xmlObj->xmlString);
-      if (!empty($data)) {
-        $rows = $data;
-      }
-    }
-    $this->rows = $data;
-    return $rows;
   }
 
   /**

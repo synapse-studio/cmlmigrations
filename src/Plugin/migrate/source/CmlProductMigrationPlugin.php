@@ -23,7 +23,8 @@ class CmlProductMigrationPlugin extends SourcePluginBase {
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration);
     $rout_name = \Drupal::routeMatch()->getRouteName();
-
+    $this->rows = 0;
+    $fields = [];
     $filepath = $this->getFilePath();
     if (FALSE) {
 
@@ -49,10 +50,6 @@ class CmlProductMigrationPlugin extends SourcePluginBase {
       if ($rout_name == "entity.migration.list") {
         dsm($fields);
       }
-    }
-    else {
-      $this->rows = 0;
-      $fields = [];
     }
     // Итератор возьмёт данные отсюда.
     $this->fields = $fields;

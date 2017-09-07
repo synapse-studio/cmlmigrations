@@ -15,4 +15,23 @@ process:
     plugin: default_value
     default_value: default
   'price/number': price
-  'price/currency_code': ccode
+  'price/currency_code': ccode 
+  title: title
+  sku:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: sku
+    -
+      plugin: migration_lookup
+      migration: cmlmigrations_commerce_product_variation
+      source: sku
+  field_product_variation_unit:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: unit
+    -
+      plugin: migration_lookup
+      migration: cmlmigrations_commerce_product_variation
+      source: unit

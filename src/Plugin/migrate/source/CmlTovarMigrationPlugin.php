@@ -22,16 +22,19 @@ class CmlTovarMigrationPlugin extends SourcePluginBase {
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration);
-    $rout_name = \Drupal::routeMatch()->getRouteName();
-
-    $filepath = $this->getFilePath();
-    $rows = $this->filePathToData($filepath);
-    $fields = [];
+    // Debug.
+    $debug = FALSE;
+    if (\Drupal::routeMatch()->getRouteName() == "entity.migration.list") {
+      $debug = TRUE;
+    }
+    $filepath = GetLastCml::filePath('import');
+    $rows = TovarParcer::getRows($filepath);
+    $this->rows = $rows;
     if ($rows) {
       $k = 0;
       $keys = [0, 100];
-      foreach ($this->rows as $key => $row) {
-        if (($k >= $keys[0] && $k < $keys[1]) || $rout_name != "entity.migration.list") {
+      foreach ($rows as $key => $row) {
+        if (($k >= $keys[0] && $k < $keys[1]) || !$debug) {
           $k++;
           $fields[$key] = [
             'uuid' => $row['Id'],
@@ -44,52 +47,11 @@ class CmlTovarMigrationPlugin extends SourcePluginBase {
         }
       }
     }
-    if ($rout_name == "entity.migration.list") {
-      dsm($fields);
-    }
     // Итератор возьмёт данные отсюда.
     $this->fields = $fields;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFilePath() {
-    $cml = GetLastCml::load();
-    $cml_xml = $cml->field_cml_xml->getValue();
-    $files = [];
-    $data = FALSE;
-    $filekeys['import'] = TRUE;
-    if (!empty($cml_xml)) {
-      foreach ($cml_xml as $xml) {
-        $file = file_load($xml['target_id']);
-        $filename = $file->getFilename();
-        $filekey = strstr($filename, '.', TRUE);
-        if (isset($filekeys[$filekey]) && $filekeys[$filekey]) {
-          $files[] = $file->getFileUri();
-        }
-      }
+    if ($debug) {
+      dsm($fields);
     }
-    $filepath = array_shift($files);
-    $this->filepath = $filepath;
-    return $filepath;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function filePathToData($filepath) {
-    $rows = FALSE;
-    if ($filepath) {
-      $xmlObj = new XmlObject();
-      $xmlObj->parseXmlFile($filepath);
-      $data = TovarParcer::parce($xmlObj->xmlString);
-      if (!empty($data)) {
-        $rows = $data;
-      }
-    }
-    $this->rows = $data;
-    return $rows;
   }
 
   /**
