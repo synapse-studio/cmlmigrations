@@ -6,7 +6,6 @@ use Drupal\migrate\Plugin\migrate\source\SourcePluginBase;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\cmlservice\Controller\GetLastCml;
 use Drupal\cmlservice\Xml\OffersParcer;
-use Drupal\cmlservice\Xml\XmlObject;
 
 /**
  * Source for CSV.
