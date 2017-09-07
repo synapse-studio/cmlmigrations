@@ -22,11 +22,11 @@ class CmlProductMigrationPlugin extends SourcePluginBase {
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration);
+    $rout_name = \Drupal::routeMatch()->getRouteName();
 
+    $filepath = $this->getFilePath();
     if (FALSE) {
-      $rout_name = \Drupal::routeMatch()->getRouteName();
 
-      $filepath = $this->getFilePath();
       $rows = $this->filePathToData($filepath);
       $fields = [];
       if ($rows) {
@@ -50,6 +50,10 @@ class CmlProductMigrationPlugin extends SourcePluginBase {
         dsm($fields);
       }
       // Итератор возьмёт данные отсюда.
+    }
+    else {
+      $this->rows = 0;
+      $fields = [];
     }
     $this->fields = $fields;
   }
