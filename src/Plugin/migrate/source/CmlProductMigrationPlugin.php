@@ -22,6 +22,42 @@ class CmlProductMigrationPlugin extends SourcePluginBase {
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration);
+
+    if (FALSE) {
+      $rout_name = \Drupal::routeMatch()->getRouteName();
+
+      $filepath = $this->getFilePath();
+      $rows = $this->filePathToData($filepath);
+      $fields = [];
+      if ($rows) {
+        $k = 0;
+        $keys = [0, 100];
+        foreach ($this->rows as $key => $row) {
+          if (($k >= $keys[0] && $k < $keys[1]) || $rout_name != "entity.migration.list") {
+            $k++;
+            $fields[$key] = [
+              'uuid' => $row['Id'],
+              'title' => $row['Naimenovanie'],
+              'catalog' => $row['Gruppy'][0],
+              'created' => time(),
+              'changed' => time(),
+              'variations' => $row['Id'],
+            ];
+          }
+        }
+      }
+      if ($rout_name == "entity.migration.list") {
+        dsm($fields);
+      }
+      // Итератор возьмёт данные отсюда.
+    }
+    $this->fields = $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFilePath() {
     $cml = GetLastCml::load();
     $cml_xml = $cml->field_cml_xml->getValue();
     $files = [];
@@ -38,23 +74,25 @@ class CmlProductMigrationPlugin extends SourcePluginBase {
       }
     }
     $filepath = array_shift($files);
+    $this->filepath = $filepath;
+    return $filepath;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function filePathToData($filepath) {
+    $rows = FALSE;
     if ($filepath) {
       $xmlObj = new XmlObject();
       $xmlObj->parseXmlFile($filepath);
       $data = TovarParcer::parce($xmlObj->xmlString);
+      if (!empty($data)) {
+        $rows = $data;
+      }
     }
     $this->rows = $data;
-    $fields = [];
-    foreach ($this->rows as $key => $row) {
-      $fields[$key] = [
-        'uuid' => $row['Id'],
-        'title' => $row['Naimenovanie'],
-        'catalog' => $row['Gruppy'][0],
-        'created' => time(),
-        'changed' => time(),
-      ];
-    }
-    $this->fields = $fields;
+    return $rows;
   }
 
   /**
