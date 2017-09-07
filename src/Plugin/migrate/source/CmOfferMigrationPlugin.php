@@ -31,10 +31,10 @@ class CmOfferMigrationPlugin extends SourcePluginBase {
     $this->rows = $rows;
     if ($rows) {
       $k = 0;
-      $keys = [0, 100];
+      $keys = [2000, 2500];
       foreach ($rows as $key => $row) {
-        if (($k >= $keys[0] && $k < $keys[1]) || !$debug) {
-          $k++;
+        $k++;
+        if (($k > $keys[0] && $k <= $keys[1]) || !$debug) {
           $fields[$key] = [
             'uuid' => $row['Id'],
             'sku' => $row['Id'],

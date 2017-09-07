@@ -33,8 +33,8 @@ class CmlTovarMigrationPlugin extends SourcePluginBase {
       $k = 0;
       $keys = [0, 100];
       foreach ($rows as $key => $row) {
-        if (($k >= $keys[0] && $k < $keys[1]) || !$debug) {
-          $k++;
+        $k++;
+        if (($k > $keys[0] && $k <= $keys[1]) || !$debug) {
           $fields[$key] = [
             'uuid' => $row['Id'],
             'title' => $row['Naimenovanie'],
