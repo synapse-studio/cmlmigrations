@@ -49,12 +49,12 @@ class CmlProductMigrationPlugin extends SourcePluginBase {
       if ($rout_name == "entity.migration.list") {
         dsm($fields);
       }
-      // Итератор возьмёт данные отсюда.
     }
     else {
       $this->rows = 0;
       $fields = [];
     }
+    // Итератор возьмёт данные отсюда.
     $this->fields = $fields;
   }
 
