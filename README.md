@@ -25,7 +25,7 @@
  * `drush mr cmlmigrations_taxonomy_catalog` - снести если что-то пошло не так
  * `drush mrs cmlmigrations_taxonomy_catalog` - сбросить стаутс если что-то сломалось
 
-## 2.3 Изменеие миграций, на примере товара
+## 2.3 Изменение миграций, на примере товара
 ```
 У тебя посути 3 плагина источника, они тут:
 /var/www/html/modules/custom/cmlmigrations/src/Plugin/migrate/source
@@ -39,6 +39,21 @@
    * Добавляем какое поле заполнить это поле, напр process:title:title
  * Переустанавливаем модуль `drush dre cmlmigrations -y`
 
+### Мульти поле:
+```
+  field_variations:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: variations
+    -
+      plugin: iterator
+      source: variations
+      process:
+        plugin: migration_lookup
+        migration: cmlmigrations_commerce_product_variation
+        source: variation
+```
 ## 2.4 Мега-комбо
 Обновить всё: `drush mi --group=cml --update`.
 ```
