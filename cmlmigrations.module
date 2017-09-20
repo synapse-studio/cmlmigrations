@@ -6,63 +6,25 @@
  */
 
 use Drupal\node\NodeInterface;
+use Drupal\cmlmigrations\Controller\FixVariation;
 
 /**
  * Hook_entity_presave.
  */
 function cmlmigrations_node_presave(NodeInterface $node) {
-  _cmlmigrations_fix_variations($node);
+  FixVariation::setVariations($node);
 }
 
 /**
  * Hook_entity_presave.
  */
 function cmlmigrations_node_insert(NodeInterface $node) {
-  _cmlmigrations_fix_variations($node);
+  FixVariation::setVariations($node);
 }
 
 /**
  * Hook_entity_presave.
  */
 function cmlmigrations_node_view(&$build, NodeInterface $node, $display, $view_mode) {
-  if ($node->getType() == 'tovar') {
-    // _cmlmigrations_fix_variations($node);
-  }
-}
-
-/**
- * Fix variations.
- */
-function _cmlmigrations_fix_variations(NodeInterface $node) {
-  $type = $node->getType();
-  if ($type == 'tovar') {
-    $variations = $node->field_tovar_variation->getValue();
-    if (!empty($variations)) {
-      foreach ($variations as $var) {
-        $vid = $var['target_id'];
-        $storage = \Drupal::entityManager()->getStorage('commerce_product_variation');
-        $variation = $storage->load($vid);
-        $title = $variation->title->value;
-        if (!$title) {
-          $pid = $variation->get('product_id');
-          $pid->setValue($node);
-          $variation->save();
-        }
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_migration_plugins_alter().
- */
-function cmlmigrations_migration_plugins_alter(&$definitions) {
-
-}
-
-/**
- * Hook Cron.
- */
-function cmlmigrations_cron() {
-
+  //FixVariation::setVariations($node);
 }

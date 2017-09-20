@@ -26,7 +26,6 @@ process:
     default_value: 1
   title: title
   status: status
-  created: created
   changed: changed
   'body/value': body_value
   'body/format': body_format
