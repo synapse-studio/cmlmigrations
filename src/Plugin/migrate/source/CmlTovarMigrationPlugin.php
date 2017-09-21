@@ -31,7 +31,7 @@ class CmlTovarMigrationPlugin extends MigrationsSourceBase {
           $id = $product['Id'];
           $rows[$id] = [
             'uuid' => $product['Id'],
-            'title' => $product['Naimenovanie'],
+            'title' => trim($product['Naimenovanie']),
             'catalog' => $product['Gruppy'][0],
             'changed' => time(),
             'variations' => $product['Id'],
