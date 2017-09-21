@@ -36,4 +36,3 @@ index 7f9b237..08a813d 100644
  
      $product_title = $this->getProduct()->getTitle();
      if ($attribute_values = $this->getAttributeValues()) {
-
