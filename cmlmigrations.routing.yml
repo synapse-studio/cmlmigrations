@@ -1,0 +1,14 @@
+cmlmigrations.tovar-update:
+  path: '/cmlmigrations/node-tovar-update'
+  defaults:
+    _controller: '\Drupal\cmlmigrations\Controller\PageNodeTovar::update'
+    _title: 'Tovat Update'
+  requirements:
+    _permission: 'administer content'
+cmlmigrations.list:
+  path: '/cmlmigrations/list'
+  defaults:
+    _controller: '\Drupal\cmlmigrations\Controller\PageMigrationsList::page'
+    _title: 'Migrations List'
+  requirements:
+    _permission: 'administer content'

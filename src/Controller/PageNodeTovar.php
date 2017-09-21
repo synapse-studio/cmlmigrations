@@ -8,7 +8,7 @@ use Drupal\node\Entity\Node;
 /**
  * Controller routines for page example routes.
  */
-class NodeTovar extends ControllerBase {
+class PageNodeTovar extends ControllerBase {
 
   /**
    * Page tree.
@@ -24,7 +24,7 @@ class NodeTovar extends ControllerBase {
     if (!empty($ids)) {
       foreach (Node::loadMultiple($ids) as $nid => $node) {
         $k++;
-        if ($nid == 9552 || TRUE) { // $k < 302 || 
+        if ($nid == 9552 || TRUE) { // $k < 302 ||
           $options[$nid] = $node->title->value;
           FixVariation::setVariations($node);
         }
