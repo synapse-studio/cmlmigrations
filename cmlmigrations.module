@@ -12,7 +12,7 @@ use Drupal\cmlmigrations\Controller\FixVariation;
  * Hook_entity_presave.
  */
 function cmlmigrations_node_presave(NodeInterface $node) {
-  // FixVariation::setVariations($node);
+  FixVariation::fixVariations($node);
 }
 
 /**

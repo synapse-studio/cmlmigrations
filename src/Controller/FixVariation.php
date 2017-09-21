@@ -3,7 +3,6 @@
 namespace Drupal\cmlmigrations\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 
 /**
@@ -58,12 +57,7 @@ class FixVariation extends ControllerBase {
     if ($type == 'tovar') {
       $nid = $node->id();
       $variations = $node->field_tovar_variation->getValue();
-      $vids_current = [];
-      if (!empty($variations)) {
-        foreach ($variations as $variation) {
-          $vids_current[] = (int) $variation['target_id'];
-        }
-      }
+      $vids_current = self::varIds($variations);
 
       $id1c = self::getTovarUuid($nid);
       $variations = self::findVariations($id1c);
@@ -78,6 +72,20 @@ class FixVariation extends ControllerBase {
   }
 
   /**
+   * VAriation Ids.
+   */
+  public static function varIds($variations) {
+    $vids = FALSE;
+    if (!empty($variations)) {
+      $vids = [];
+      foreach ($variations as $variation) {
+        $vids[] = (int) $variation['target_id'];
+      }
+    }
+    return $vids;
+  }
+
+  /**
    * Fix.
    */
   public static function fix($vids, $node) {
@@ -89,7 +97,6 @@ class FixVariation extends ControllerBase {
         $pid = $variation->get('product_id');
         $pid->setValue($node);
         $variation->save();
-        // dsm("UPD: " . $node->id() . " -- " . $node->title->value);
       }
     }
   }
@@ -97,22 +104,14 @@ class FixVariation extends ControllerBase {
   /**
    * Fix.
    */
-  public static function fixTovar(NodeInterface $node) {
+  public static function fixVariations(NodeInterface $node) {
     $type = $node->getType();
     if ($type == 'tovar') {
+      $nid = $node->id();
       $variations = $node->field_tovar_variation->getValue();
-      if (!empty($variations)) {
-        foreach ($variations as $var) {
-          $vid = $var['target_id'];
-          $storage = \Drupal::entityManager()->getStorage('commerce_product_variation');
-          $variation = $storage->load($vid);
-          $title = $variation->title->value;
-          if (is_object($variation) && !$title) {
-            $pid = $variation->get('product_id');
-            $pid->setValue($node);
-            $variation->save();
-          }
-        }
+      $vids = self::varIds($variations);
+      if ($vids) {
+        self::fix($vids, $node);
       }
     }
   }
