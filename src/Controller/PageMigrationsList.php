@@ -14,7 +14,6 @@ class PageMigrationsList extends ControllerBase {
    * Page.
    */
   public function page() {
-    $result = '++';
     $rows = [];
     $manager = \Drupal::service('plugin.manager.config_entity_migration');
     $plugins = $manager->createInstances([]);
@@ -23,10 +22,17 @@ class PageMigrationsList extends ControllerBase {
         $rows[] = $this->buildRow($migration);
       }
     }
-    return [
+
+    $form = \Drupal::formBuilder()->getForm('Drupal\cmlmigrations\Form\ExecMigrations', $plugins);
+    $table = [
       '#type' => 'table',
       '#header' => $this->buildHeader(),
       '#rows' => $rows,
+    ];
+
+    return [
+      'form' => $form,
+      'migr-table' => $table,
     ];
   }
 
@@ -35,7 +41,6 @@ class PageMigrationsList extends ControllerBase {
    */
   public function buildHeader() {
     $header['label'] = $this->t('Migration');
-    $header['machine_name'] = $this->t('Machine Name');
     $header['status'] = $this->t('Status');
     $header['total'] = $this->t('Total');
     $header['imported'] = $this->t('Imported');
@@ -49,9 +54,11 @@ class PageMigrationsList extends ControllerBase {
    * Builds a row for a migration plugin.
    */
   public function buildRow($migration) {
-
-    $row['label'] = $migration->label();
-    $row['machine_name'] = $migration->id();
+    $label = $migration->label();
+    $id = $migration->id();
+    $row['label'] = [
+      'data' => ['#markup' => "$label<br><small>$id</small>"],
+    ];
 
     $row['status'] = $migration->getStatusLabel();
 

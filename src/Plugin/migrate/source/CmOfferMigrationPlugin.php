@@ -21,7 +21,7 @@ class CmOfferMigrationPlugin extends MigrationsSourceBase {
   public function getRows() {
     $k = 0;
     $rows = [];
-    $filepath = GetLastCml::filePath('import');
+    $filepath = GetLastCml::filePath('offers');
     $source = OffersParcer::getRows($filepath);
     if ($source) {
       foreach ($source as $key => $row) {
