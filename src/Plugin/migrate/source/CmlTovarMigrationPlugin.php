@@ -26,9 +26,9 @@ class CmlTovarMigrationPlugin extends MigrationsSourceBase {
     if ($source) {
       foreach ($source as $key => $row) {
         if ($k++ < 700 || !$this->uipage) {
-          $id = $row['Id'];
           $product = $row['offers'];
           $offers = $row['product'];
+          $id = $product['Id'];
           $rows[$id] = [
             'uuid' => $product['Id'],
             'title' => $product['Naimenovanie'],
