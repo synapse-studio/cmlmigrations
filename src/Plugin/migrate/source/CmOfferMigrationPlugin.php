@@ -29,6 +29,7 @@ class CmOfferMigrationPlugin extends MigrationsSourceBase {
           $id = $row['Id'];
           $rows[$id] = [
             'uuid' => $row['Id'],
+            'sku' => $row['Id'],
             'title' => $row['Naimenovanie'],
             'unit' => $row['BazovaaEdinica'],
             'Kolicestvo' => $row['Kolicestvo'],

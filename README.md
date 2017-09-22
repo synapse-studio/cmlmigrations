@@ -4,8 +4,8 @@
  * `composer require drupal/migrate_plus`
 
 ## 1.2 Качаем модуль и включаем
- * `cd /var/www/html/modules/custom` 
- * `git clone https://github.com/synapse-studio/cmlmigrations` 
+ * `cd /var/www/html/modules/custom`
+ * `git clone https://github.com/synapse-studio/cmlmigrations`
  * `drush en cmlmigrations`
 
 ## 1.3 Проверяем работоспособрость
@@ -58,4 +58,23 @@
 Обновить всё: `drush mi --group=cml --update`.
 ```
 drush mi cmlmigrations_taxonomy_catalog --update && drush mi cmlmigrations_commerce_product_variation --update && drush mi cmlmigrations_node_tovar --update
+```
+
+
+# Хак для импорта вариаций
+/modules/contrib/commerce/modules/product/src/Entity/ProductVariation.php
+
+* 350 строчка
+```
+  protected function generateTitle() {
+    if (!$this->getProductId()) {
+      // Title generation is not possible before the parent product is known.
+      return '';
+    }
+
++   if (!is_object($this->getProduct())) {
++     return '';
++   }
+
+    $product_title = $this->getProduct()->getTitle();
 ```

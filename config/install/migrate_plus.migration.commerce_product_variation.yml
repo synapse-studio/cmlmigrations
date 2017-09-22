@@ -15,5 +15,6 @@ process:
     plugin: default_value
     default_value: default
   title: title
+  sku: sku
   'price/number': price
   'price/currency_code': ccode
