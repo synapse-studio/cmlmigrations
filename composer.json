@@ -1,0 +1,11 @@
+{
+    "name": "synapse/cmlmigrations",
+    "type": "drupal-custom-module",
+    "description": "Synapse.",
+    "homepage": "https://github.com/synapse-studio/cmlmigrations",
+    "license": "GPL-2.0+",
+    "require": {
+        "drupal/core": "~8.3"
+    },
+    "minimum-stability": "dev"
+}
