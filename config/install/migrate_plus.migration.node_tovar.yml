@@ -44,6 +44,6 @@ process:
       method: process
       source: variations
     -
-      plugin: migration_lookup
-      migration: cmlmigrations_commerce_product_variation
+      plugin: multival
       source: variations
+      target_id: target_id

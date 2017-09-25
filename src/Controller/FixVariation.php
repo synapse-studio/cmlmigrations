@@ -24,11 +24,13 @@ class FixVariation extends ControllerBase {
 
       if ($res) {
         foreach ($res as $key => $value) {
-          $variations[$value->destid1] = $value->sourceid1;
+          $variations[] = [
+            'src' => $value->sourceid1,
+            'target_id' => $value->destid1,
+          ];
         }
       }
     }
-
     return $variations;
   }
 
@@ -61,7 +63,7 @@ class FixVariation extends ControllerBase {
 
       $id1c = self::getTovarUuid($nid);
       $variations = self::findVariations($id1c);
-      $vids_new = array_keys($variations);
+      $vids_new = self::varIds($variations);
       if ($vids_current != $vids_new) {
         $node->field_tovar_variation->setValue($vids_new);
         $node->save();

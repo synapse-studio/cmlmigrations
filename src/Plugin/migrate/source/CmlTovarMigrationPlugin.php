@@ -5,6 +5,7 @@ namespace Drupal\cmlmigrations\Plugin\migrate\source;
 use Drupal\cmlmigrations\MigrationsSourceBase;
 use Drupal\cmlservice\Controller\GetLastCml;
 use Drupal\cmlservice\Xml\TovarParcer;
+use Drupal\cmlmigrations\Controller\FixVariation;
 
 /**
  * Source for CSV.
@@ -29,12 +30,13 @@ class CmlTovarMigrationPlugin extends MigrationsSourceBase {
           $product = $row['product'];
           $offers = $row['offers'];
           $id = $product['Id'];
+          $variations = FixVariation::findVariations($id);
           $rows[$id] = [
             'uuid' => $product['Id'],
             'title' => trim($product['Naimenovanie']),
             'catalog' => $product['Gruppy'][0],
             'changed' => time(),
-            'variations' => $product['Id'],
+            'variations' => $variations,
             'body_value' => FALSE,
             'body_format' => "wysiwyg",
           ];
