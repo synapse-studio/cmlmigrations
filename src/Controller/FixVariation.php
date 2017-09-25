@@ -95,7 +95,8 @@ class FixVariation extends ControllerBase {
       $storage = \Drupal::entityManager()->getStorage('commerce_product_variation');
       $variation = $storage->load($vid);
       $title = $variation->title->value;
-      if (!$title) {
+      $product_id = $variation->product_id->getValue();
+      if (!$title || empty($product_id)) {
         $pid = $variation->get('product_id');
         $pid->setValue($node);
         $variation->save();
