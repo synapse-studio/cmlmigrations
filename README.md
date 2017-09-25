@@ -75,7 +75,7 @@ drush mi cmlmigrations_taxonomy_catalog --update && drush mi cmlmigrations_comme
       ->getStorage('commerce_product_variation_type')
       ->load($this->bundle());
 
-    $title_import = $this->title->value;
++   $title_import = $this->title->value;
     if ($variation_type->shouldGenerateTitle()) {
       $title = $this->generateTitle();
       $this->setTitle($title);
