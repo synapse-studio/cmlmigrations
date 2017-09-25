@@ -39,20 +39,18 @@
    * Добавляем какое поле заполнить это поле, напр process:title:title
  * Переустанавливаем модуль `drush dre cmlmigrations -y`
 
-### Мульти поле:
+### Мульти поле field_tovar_variation:
+Сейчас реализауется отедельным плагином:
 ```
-  field_variations:
+  field_tovar_variation:
     -
       plugin: skip_on_empty
       method: process
       source: variations
     -
-      plugin: iterator
+      plugin: multival
       source: variations
-      process:
-        plugin: migration_lookup
-        migration: cmlmigrations_commerce_product_variation
-        source: variation
+      target_id: target_id
 ```
 ## 2.4 Мега-комбо
 Обновить всё: `drush mi --group=cml --update`.
@@ -63,6 +61,30 @@ drush mi cmlmigrations_taxonomy_catalog --update && drush mi cmlmigrations_comme
 
 # Хак для импорта вариаций
 /modules/contrib/commerce/modules/product/src/Entity/ProductVariation.php
+
+* 327 строчка
+```
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage) {
+    parent::preSave($storage);
+
+    /** @var \Drupal\commerce_product\Entity\ProductVariationTypeInterface $variation_type */
+    $variation_type = $this->entityTypeManager()
+      ->getStorage('commerce_product_variation_type')
+      ->load($this->bundle());
+
+    $title_import = $this->title->value;
+    if ($variation_type->shouldGenerateTitle()) {
+      $title = $this->generateTitle();
+      $this->setTitle($title);
+    }
++   if (!$title) {
++     $this->setTitle($title_import);
++   }
+  }
+```
 
 * 350 строчка
 ```
@@ -78,3 +100,4 @@ drush mi cmlmigrations_taxonomy_catalog --update && drush mi cmlmigrations_comme
 
     $product_title = $this->getProduct()->getTitle();
 ```
+ 
