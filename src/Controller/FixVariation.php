@@ -107,13 +107,13 @@ class FixVariation extends ControllerBase {
   /**
    * Fix.
    */
-  public static function fixVariations(NodeInterface $node) {
+  public static function fixVariations(NodeInterface $node, $insert = FALSE) {
     $type = $node->getType();
     if ($type == 'tovar') {
       $nid = $node->id();
       $variations = $node->field_tovar_variation->getValue();
       $vids = self::varIds($variations);
-      if ($vids) {
+      if ($vids && $node->id()) {
         self::fix($vids, $node);
       }
     }

@@ -16,15 +16,8 @@ function cmlmigrations_node_presave(NodeInterface $node) {
 }
 
 /**
- * Hook_entity_presave.
+ * Hook_entity_insert.
  */
 function cmlmigrations_node_insert(NodeInterface $node) {
-  // FixVariation::setVariations($node);
-}
-
-/**
- * Hook_entity_presave.
- */
-function cmlmigrations_node_view(&$build, NodeInterface $node, $display, $view_mode) {
-  // FixVariation::setVariations($node);
+  FixVariation::fixVariations($node, TRUE);
 }
