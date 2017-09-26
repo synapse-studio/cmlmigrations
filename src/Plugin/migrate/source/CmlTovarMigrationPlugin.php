@@ -61,7 +61,6 @@ class CmlTovarMigrationPlugin extends MigrationsSourceBase {
       $query->sort('created', 'DESC');
       $fileIds = $query->execute();
       $fid = array_shift($fileIds);
-      $rows[$id]['field_image'] = $image;
       $rows[$id]['field_image'] = [
         'image' => $image,
         'fid' => $fid,
