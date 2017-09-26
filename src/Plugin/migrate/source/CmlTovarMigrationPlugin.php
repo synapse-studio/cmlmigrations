@@ -40,11 +40,34 @@ class CmlTovarMigrationPlugin extends MigrationsSourceBase {
             'body_value' => FALSE,
             'body_format' => "wysiwyg",
           ];
+          self::hasImage($rows, $product, $id);
         }
       }
     }
     $this->debug = TRUE;
     return $rows;
+  }
+
+  /**
+   * HasImage.
+   */
+  public function hasImage(&$rows, $product, $id, $field = 'Kartinka') {
+    $result = FALSE;
+    if (isset($product[$field])) {
+      $image = $product[$field];
+      $query = \Drupal::entityQuery('file');
+      $query->condition('uri', "%$image%", 'LIKE');
+      $query->condition('status', 1);
+      $query->sort('created', 'DESC');
+      $fileIds = $query->execute();
+      $fid = array_shift($fileIds);
+      $rows[$id]['field_image'] = $image;
+      $rows[$id]['field_image'] = [
+        'image' => $image,
+        'fid' => $fid,
+      ];
+    }
+    return $result;
   }
 
 }

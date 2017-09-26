@@ -47,3 +47,4 @@ process:
       plugin: multival
       source: variations
       target_id: target_id
+  field_image/target_id: field_image/fid
