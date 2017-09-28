@@ -25,14 +25,13 @@ class CmlTovarMigrationPlugin extends MigrationsSourceBase {
     $filepath = GetLastCml::filePath('import');
     $source = TovarParcer::getRows($filepath);
     if ($source) {
-      foreach ($source as $key => $row) {
+      foreach ($source as $id => $row) {
         if ($k++ < 700 || !$this->uipage) {
           $product = $row['product'];
           $offers = $row['offers'];
-          $id = $product['Id'];
           $variations = FixVariation::findVariations($id);
           $rows[$id] = [
-            'uuid' => $product['Id'],
+            'uuid' => $id,
             'title' => trim($product['Naimenovanie']),
             'catalog' => $product['Gruppy'][0],
             'changed' => time(),
