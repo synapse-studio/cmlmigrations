@@ -15,7 +15,7 @@ class PageMigrationsList extends ControllerBase {
    */
   public function page() {
     $rows = [];
-    $manager = \Drupal::service('plugin.manager.config_entity_migration');
+    $manager = \Drupal::service('plugin.manager.migration');
     $plugins = $manager->createInstances([]);
     if (!empty($plugins)) {
       foreach ($plugins as $id => $migration) {
