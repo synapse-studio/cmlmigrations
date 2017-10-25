@@ -57,7 +57,6 @@ class CmlCatalogMigrationPlugin extends MigrationsSourceBase {
     if ($result) {
       foreach ($result as $key => $value) {
         $tid = $value->destid1;
-        // Скроем старый пункт.
         $query = \Drupal::database()->update('taxonomy_term_hierarchy');
         $query->fields(['parent' => 0]);
         $query->condition('tid', $tid);
