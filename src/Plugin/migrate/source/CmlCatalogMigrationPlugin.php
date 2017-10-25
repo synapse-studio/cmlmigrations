@@ -34,11 +34,38 @@ class CmlCatalogMigrationPlugin extends MigrationsSourceBase {
           if (isset($row['parent']) && $row['parent']) {
             $rows[$key]['parent'] = $row['parent'];
           }
+          else {
+            // Fix parent to '0' if termin exists.
+            self::fixHierarchyParent($row['id']);
+          }
         }
       }
     }
     $this->debug = TRUE;
     return $rows;
+  }
+
+  /**
+   * Fix Hierarchy Parent.
+   */
+  public static function fixHierarchyParent($id) {
+    $query = \Drupal::database()->select('migrate_map_cmlmigrations_taxonomy_catalog', 'taxonomy_migration');
+    $query->fields('taxonomy_migration', ['destid1', 'sourceid1']);
+    $query->condition('sourceid1', $id);
+    $result = $query->execute();
+    $tid = FALSE;
+    if ($result) {
+      foreach ($result as $key => $value) {
+        $tid = $value->destid1;
+        // Скроем старый пункт.
+        $query = \Drupal::database()->update('taxonomy_term_hierarchy');
+        $query->fields(['parent' => 0]);
+        $query->condition('tid', $tid);
+        $query->execute();
+      }
+    }
+    return $tid;
+
   }
 
 }
