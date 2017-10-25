@@ -2,6 +2,9 @@
 id: cmlmigrations_taxonomy_catalog
 label: Catalog tree
 migration_group: cml
+migration_tags:
+  - node
+  - commerce
 dependencies:
   enforced:
     module:

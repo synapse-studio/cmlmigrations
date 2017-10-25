@@ -2,6 +2,8 @@
 id: cmlmigrations_node_tovar
 label: Node Tovar
 migration_group: cml
+migration_tags:
+  - node
 dependencies:
   enforced:
     module:

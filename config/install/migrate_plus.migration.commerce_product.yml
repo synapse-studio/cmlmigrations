@@ -2,6 +2,8 @@
 id: cmlmigrations_commerce_product
 label: Commerce Product
 migration_group: cml
+migration_tags:
+  - commerce
 dependencies:
   enforced:
     module:
