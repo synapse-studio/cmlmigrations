@@ -46,4 +46,25 @@ class CmlProductMigrationPlugin extends MigrationsSourceBase {
     return $rows;
   }
 
+  /**
+   * Helper to understend problem.
+   */
+  public function fixVariation($id) {
+    // #print "$id\n"; //Debug.
+    $storage = \Drupal::entityManager()->getStorage('commerce_product_variation');
+    $variation = $storage->load($id);
+    if ($variation) {
+      $title = $variation->title->value;
+      $product_id = $variation->product_id->getValue();
+      if (!$title || empty($product_id)) {
+        $product = \Drupal::entityManager()->getStorage('commerce_product')->load($id);
+        if ($product) {
+          $pid = $variation->get('product_id');
+          $pid->setValue($product);
+          $variation->save();
+        }
+      }
+    }
+  }
+
 }
