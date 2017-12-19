@@ -1,4 +1,16 @@
 # 1. Установка:
+## 1.1 Composer:
+```
+composer require 'drupal/cmlmigrations:1.x-dev'
+drush en cmlmigrations commerce_cart -y && drush cr
+```
+## 1.2 Зависимости (скачаются композером):
+ * system (>=8.4)
+ * migrate_tools
+ * migrate_plus
+ * commerce
+ * cmlapi
+
 ## 1.1 Добавляем 2 модуля, они в зависимостях:
  * `composer require drupal/migrate_tools`
  * `composer require drupal/migrate_plus`
