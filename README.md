@@ -1,8 +1,9 @@
 # 1. Установка:
 ## 1.1 Composer:
 ```
+composer require 'drupal/cmlexchange:1.x-dev'
 composer require 'drupal/cmlmigrations:1.x-dev'
-drush en cmlmigrations commerce_cart -y && drush cr
+drush en cmlmigrations commerce_cart cmlexchange -y && drush cr
 ```
 ## 1.2 Зависимости (скачаются композером):
  * system (>=8.4)
