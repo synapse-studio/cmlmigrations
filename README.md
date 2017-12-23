@@ -19,7 +19,7 @@
  * `drush mim --group=cml --update` - Всё
  * Удалить всё 
    * `drush mr cml_product && drush mr cml_product_variation && drush mr cml_taxonomy_catalog`
-   * луче в таком порядке, иначе для удаления товаров придётся комментировать одну строчку в коммерс_продукт.
+   * луче в таком порядке, иначе для удаления товаров придётся комментировать `$variation_storage->delete($variations)` в `Drupal\commerce_product\Entity\Product`.
  
 
 # 3. Замеры производительности
