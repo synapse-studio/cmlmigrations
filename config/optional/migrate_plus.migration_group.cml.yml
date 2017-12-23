@@ -1,9 +1,0 @@
-langcode: ru
-status: true
-dependencies: {  }
-id: cml
-label: cml
-description: ''
-source_type: ''
-module: null
-shared_configuration: null

@@ -1,8 +1,0 @@
-cmlmigrations.list:
-  title: 'CML Migrations List'
-  parent: migrate_tools.menu
-  route_name: cmlmigrations.list
-cmlmigrations.tovar-update:
-  title: 'Tovat Update'
-  parent: migrate_tools.menu
-  route_name: cmlmigrations.tovar-update
