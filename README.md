@@ -6,6 +6,7 @@
 
 # Видео
 [![Drupal 8 интеграция с 1С](http://img.youtube.com/vi/STwicbT1MQQ/0.jpg)](http://www.youtube.com/watch?v=STwicbT1MQQ "Drupal 8 интеграция с 1С")
+https://www.youtube.com/watch?v=STwicbT1MQQ
 
 # 1. Установка:
 ## 1.1 Добавляем 2 модуля и включаем их.
