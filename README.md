@@ -4,6 +4,9 @@
  * Зависит от модуля **Commerce ML API** https://www.drupal.org/project/cmlapi
  * Рекомендуем к ним добавить **Commerce ML Exchange** https://www.drupal.org/project/cmlexchange
 
+# Видео
+[![Drupal 8 интеграция с 1С](http://img.youtube.com/vi/STwicbT1MQQ/0.jpg)](http://www.youtube.com/watch?v=STwicbT1MQQ "Drupal 8 интеграция с 1С")
+
 # 1. Установка:
 ## 1.1 Добавляем 2 модуля и включаем их.
  * `composer require 'drupal/cmlexchange:1.x-dev'`
